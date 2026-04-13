@@ -1,28 +1,28 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const Contact = require("./models/Contact");
 const express = require("express");
 const cors = require("cors");
+const Contact = require("./models/Contact");
 
 const app = express();
 
-// Middleware
+// ✅ Middleware
 app.use(cors());
 app.use(express.json());
 
-// ✅ ONLY ONE CONNECTION
+// ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {
-    family: 4
+    family: 4   // helps fix DNS issues
 })
 .then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+.catch((err) => console.log(err));
 
-// Test route
+// ✅ Test Route
 app.get("/", (req, res) => {
     res.send("Server is running");
 });
 
-// Contact API
+// ✅ Contact API
 app.post("/contact", async (req, res) => {
     try {
         const { name, email, message } = req.body;
@@ -36,17 +36,15 @@ app.post("/contact", async (req, res) => {
         await newContact.save();
 
         res.status(200).json({ message: "Message saved successfully" });
-
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: "Error saving message" });
     }
 });
 
-// Start server
+// ✅ Start Server (IMPORTANT for Render)
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-app.use(cors({
-    origin: "*"
-}));

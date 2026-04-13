@@ -39,7 +39,7 @@ async function sendMessage(e) {
     };
 
     try {
-        const response = await fetch("http://localhost:5000/contact", {
+        const response = await fetch("https://myportfolio-backend-uyba.onrender.com/contact", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
